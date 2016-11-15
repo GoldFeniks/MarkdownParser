@@ -29,11 +29,11 @@ package MarkdownParser {
 			}, #block code
 			{
 			 	regex => qr/((?:(?:\s+|^)(?<!\\)[*\-+]\s.*$)+)/m, 
-			 	func => sub { "\n<ul>\n".parse_list($1, '[*\-+]')."</ul>" } 
+			 	func => sub { parse_list($1, '[*\-+]', 'ul') } 
 			 }, #bullet list
 			{ 
 				regex => qr/((?:(?:\s+|^)(?<!\\)\d+(?<!\\)\.\s.*$)+)/m, 
-				func => sub { "\n<ol>\n".parse_list($1, '\d+\.')."</ol>" } 
+				func => sub { parse_list($1, '\d+\.', 'ol') } 
 			}, #numbered list
 			{ 
 				regex => qr/^((?:(?<!\\)#){1,6})(.+)$/m, 
@@ -97,9 +97,17 @@ package MarkdownParser {
 	}
 
 	sub parse_list {
-		my ($string, $symbols) = @_;
-		$string =~ s/\s*$symbols (.*)$/"<li>$1<\/li>\n"/emg;
-		$string;
+		my ($string, $symbols, $tag) = @_;
+		$string =~ /^( *)$symbols/m;
+		my $n = length $1;
+		while ($string =~ /^(\s*)$symbols\s(.*)$/m) {
+			my $s = $1;
+			$s =~ s/\n//g;
+			my $m = length $s;
+			$string =~ s/((?:\n {$m,}$symbols\s.*$)+)/parse_list($1, $symbols, $tag)/emg and next if $m > $n;
+			$string =~ s/^ {$n}$symbols (.*)$/"<li>$1<\/li>"/emg;
+		}
+		"\n<$tag>$string<\/$tag>\n";
 	}
 
 	sub parse {

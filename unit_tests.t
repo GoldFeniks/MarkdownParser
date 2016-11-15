@@ -90,19 +90,21 @@ subtest 'Blockquote' => sub {
 };
 
 subtest 'Bullet list' => sub {
-	plan tests => 4;
-	is(parse("* fuu\n* fuu\n* fuu"), "\n<ul>\n<li>fuu</li>\n<li>fuu</li>\n<li>fuu</li>\n</ul>");
-	is(parse("+ fuu\n- fuu\n* fuu"), "\n<ul>\n<li>fuu</li>\n<li>fuu</li>\n<li>fuu</li>\n</ul>");
-	is(parse("* fuu + fuu * fuu -\n* fuu + fuu * fuu -"), "\n<ul>\n<li>fuu + fuu * fuu -<\/li>\n<li>fuu + fuu * fuu -</li>\n</ul>");
-	is(parse("\\* fuu\n* fuu"), "* fuu\n<ul>\n<li>fuu</li>\n</ul>");
+	plan tests => 5;
+	is(parse("* fuu\n* fuu\n* fuu"), "\n<ul><li>fuu</li>\n<li>fuu</li>\n<li>fuu</li></ul>\n");
+	is(parse("+ fuu\n- fuu\n* fuu"), "\n<ul><li>fuu</li>\n<li>fuu</li>\n<li>fuu</li></ul>\n");
+	is(parse("* fuu + fuu * fuu -\n* fuu + fuu * fuu -"), "\n<ul><li>fuu + fuu * fuu -<\/li>\n<li>fuu + fuu * fuu -</li></ul>\n");
+	is(parse("\\* fuu\n* fuu"), "* fuu\n<ul>\n<li>fuu</li></ul>\n");
+	is(parse("* fuu\n  * fuu\n* fuu"), "\n<ul><li>fuu</li>\n<ul>\n<li>fuu</li></ul>\n\n<li>fuu</li></ul>\n");
 };
 
 subtest 'Numbered list' => sub {
-	plan tests => 4;
-	is(parse("1. fuu\n2. fuu\n3. fuu"), "\n<ol>\n<li>fuu</li>\n<li>fuu</li>\n<li>fuu</li>\n</ol>");
-	is(parse("1. fuu 2. fuu 3. fuu 4.\n2. fuu 3. fuu 4. fuu 5."), "\n<ol>\n<li>fuu 2. fuu 3. fuu 4.<\/li>\n<li>fuu 3. fuu 4. fuu 5.</li>\n</ol>");
-	is(parse("\\1. fuu\n1. fuu"), "1. fuu\n<ol>\n<li>fuu</li>\n</ol>");
-	is(parse("1\\. fuu\n1. fuu"), "1. fuu\n<ol>\n<li>fuu</li>\n</ol>");
+	plan tests => 5;
+	is(parse("1. fuu\n2. fuu\n3. fuu"), "\n<ol><li>fuu</li>\n<li>fuu</li>\n<li>fuu</li></ol>\n");
+	is(parse("1. fuu 2. fuu 3. fuu 4.\n2. fuu 3. fuu 4. fuu 5."), "\n<ol><li>fuu 2. fuu 3. fuu 4.<\/li>\n<li>fuu 3. fuu 4. fuu 5.</li></ol>\n");
+	is(parse("\\1. fuu\n1. fuu"), "1. fuu\n<ol>\n<li>fuu</li></ol>\n");
+	is(parse("1\\. fuu\n1. fuu"), "1. fuu\n<ol>\n<li>fuu</li></ol>\n");
+	is(parse("1. fuu\n  2. fuu\n3. fuu"), "\n<ol><li>fuu</li>\n<ol>\n<li>fuu</li></ol>\n\n<li>fuu</li></ol>\n");
 };
 
 subtest 'Header' => sub {

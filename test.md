@@ -16,6 +16,10 @@ Paragraphs must be separated by a blank line. Basic formatting of *italics*, **b
 
 1. Item 1
 2. A second item
+  1. Nested
+  2. Numbered
+    1. List
+  3. Here
 3. Number 3
 4. Ⅳ
 
@@ -25,6 +29,10 @@ Paragraphs must be separated by a blank line. Basic formatting of *italics*, **b
 
 * An item
 + Another item
+  * Nested
+  * Ordered
+    * List
+  * Here
 - Yet another item
 * And there's more...
 
