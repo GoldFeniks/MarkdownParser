@@ -104,8 +104,8 @@ package MarkdownParser {
 			my $s = $1;
 			$s =~ s/\n//g;
 			my $m = length $s;
-			$string =~ s/((?:\n {$m,}$symbols\s.*$)+)/parse_list($1, $symbols, $tag)/emg and next if $m > $n;
-			$string =~ s/^ {$n}$symbols (.*)$/"<li>$1<\/li>"/emg;
+			do { $string =~ s/((?:\n {$m,}$symbols\s.*$)+)/parse_list($1, $symbols, $tag)/emg; next; } if $m > $n;
+			$string =~ s/^ {0,$n}$symbols (.*)$/"<li>$1<\/li>"/emg;
 		}
 		"\n<$tag>$string<\/$tag>\n";
 	}
